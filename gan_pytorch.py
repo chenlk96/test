@@ -47,7 +47,7 @@ G = nn.Sequential(
     nn.Linear(latent_size, hidden_size),
     nn.ReLU(),
     nn.Linear(hidden_size, hidden_size),
-    nn.ReLu(),
+    nn.ReLU(),
     nn.Linear(hidden_size, image_size),
     nn.Tanh())
 
@@ -71,7 +71,7 @@ def reset_grad():
 # start training
 total_step = len(data_loader)
 for epoch in range(num_epochs):
-    for i, (image, _) in enumerate(data_loader):
+    for i, (images, _) in enumerate(data_loader):
         images = images.reshape(batch_size, -1).to(device)
 
         # Create the labels which are later used as input for the BCE loss
@@ -98,6 +98,7 @@ for epoch in range(num_epochs):
         # train the generator
         # compute loss with fake images
         z = torch.randn(batch_size, latent_size).to(device)
+        fake_images = G(z)
         outputs = D(fake_images)
 
         # We train G to maximize log(D(G(z)) instead of minimizing log(1-D(G(z)))
